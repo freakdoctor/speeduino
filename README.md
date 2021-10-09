@@ -1,5 +1,7 @@
 <div align="center">
 
+Fork of official Speeduino project for implement Bosch Me7.x family electronic pedal. 
+
 <img src="https://github.com/speeduino/wiki.js/raw/master/img/Speeduino%20logo_med.png" alt="Speeduino" width="600" />
 
 [![Release](https://img.shields.io/github/release/noisymime/speeduino.svg)](https://github.com/noisymime/speeduino/releases/latest)
