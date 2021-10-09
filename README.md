@@ -12,7 +12,9 @@
 ![MISRA](https://img.shields.io/azure-devops/tests/speeduino/Speeduino/1?label=MISRA&passed_label=warnings&failed_label=violations)
 [![Chat on Slack](https://img.shields.io/badge/slack-speeduino-CC2B5E.svg?style=flat&logo=slack)](https://speeduino.com/home/community/slack)
 
-Fork of official Speeduino project for implement Bosch Me7.x family electronic pedal.
+Work in progress
+
+Fork of official Speeduino project for Bosch Me7.x family electronic pedal implement .
 
 ##### A low cost, DIY friendly Engine Management System (ECU) based on the Arduino framework
 </div>
