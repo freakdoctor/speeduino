@@ -686,6 +686,29 @@ byte getOilPressure()
   return (byte)tempOilPressure;
 }
 
+byte getPedalPosition()
+{
+  uint16_t tempPedalPosition = 0;
+  uint16_t pedalReading;
+
+  if(configPage13.pedalPositionEnable > 0)
+  {
+    //Perform ADC read
+    pedalReading = analogRead(pinPedalPosition);
+    pedalReading = analogRead(pinPedalPosition);
+
+
+    tempPedalPosition = fastMap10Bit(pedalReading, configPage13.pedalPositionMin, configPage13.pedalPositionMax);
+    tempPedalPosition = ADC_FILTER(tempPedalPosition, 150, currentStatus.pedalPosition); //Apply speed smoothing factor
+    //Sanity check
+    if(tempPedalPosition > configPage13.pedalPositionMax) { tempPedalPosition = configPage13.pedalPositionMax; }
+    if(tempPedalPosition < 0 ) { tempPedalPosition = 0; } //prevent negative values, which will cause problems later when the values aren't signed.
+  }
+
+
+  return (byte)tempPedalPosition;
+}
+
 /*
  * The interrupt function for reading the flex sensor frequency and pulse width
  * flexCounter value is incremented with every pulse and reset back to 0 once per second

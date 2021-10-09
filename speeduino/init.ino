@@ -2542,6 +2542,8 @@ void setPinMapping(byte boardID)
   if ( (configPage10.wmiEnabledPin != 0) && (configPage10.wmiEnabledPin < BOARD_MAX_IO_PINS) ) { pinWMIEnabled = pinTranslate(configPage10.wmiEnabledPin); }
   if ( (configPage10.vvt2Pin != 0) && (configPage10.vvt2Pin < BOARD_MAX_IO_PINS) ) { pinVVT_2 = pinTranslate(configPage10.vvt2Pin); }
 
+  if ( (configPage13.pedalPositionEnable) && (configPage13.pedalPositionPin < BOARD_MAX_IO_PINS) ) { pinPedalPosition = pinTranslateAnalog(configPage13.pedalPositionPin); }
+
   //Currently there's no default pin for Idle Up
   pinIdleUp = pinTranslate(configPage2.idleUpPin);
 
@@ -2756,7 +2758,12 @@ void setPinMapping(byte boardID)
       if (configPage10.wmiEmptyPolarity == 0) { pinMode(pinWMIEmpty, INPUT_PULLUP); } //Normal setting
       else { pinMode(pinWMIEmpty, INPUT); } //inverted setting
     }
+
   }  
+  if(configPage13.pedalPositionEnable > 0)
+  {
+    pinMode(pinPedalPosition, INPUT);
+  }
 
   //These must come after the above pinMode statements
   triggerPri_pin_port = portInputRegister(digitalPinToPort(pinTrigger));

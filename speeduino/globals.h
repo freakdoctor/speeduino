@@ -728,6 +728,7 @@ struct statuses {
   long vvt2Duty; //Has to be a long for PID calcs (CL VVT control)
   byte outputsStatus;
   byte TS_SD_Status; //TunerStudios SD card status
+  byte pedalPosition;
 };
 
 /** Page 2 of the config - mostly variables that are required for fuel.
@@ -1415,8 +1416,14 @@ struct config13 {
   byte onboard_log_tr4_thr_off;       // "V",        0.1,   0.0,  0.0,  15.90,      2 ; * (  1 byte)   
   byte onboard_log_tr5_thr_on;        // "pin",      0,    0, 0,  1,    255,        0 ;  
 
+//Electronic pedal
+  byte pedalPositionEnable : 1; //byte 124
+  byte pedalPositionPin : 5; //byte 124
+  byte unused12_124 : 2; //byte 124
+  byte pedalPositionMin; //byte 125
+  byte pedalPositionMax; //byte 126
 
-  byte unused12_125_127[4];
+  byte unused12_127_127[1];
 
 #if defined(CORE_AVR)
   };

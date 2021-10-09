@@ -285,6 +285,7 @@ void loop()
       //FOR TEST PURPOSES ONLY!!!
       //if(vvt2_pwm_value < vvt_pwm_max_count) { vvt2_pwm_value++; }
       //else { vvt2_pwm_value = 1; }
+      currentStatus.pedalPosition = getPedalPosition();
       #if TPS_READ_FREQUENCY == 30
         readTPS();
       #endif
