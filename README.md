@@ -1,6 +1,5 @@
 <div align="center">
 
-Fork of official Speeduino project for implement Bosch Me7.x family electronic pedal. 
 
 <img src="https://github.com/speeduino/wiki.js/raw/master/img/Speeduino%20logo_med.png" alt="Speeduino" width="600" />
 
@@ -12,6 +11,8 @@ Fork of official Speeduino project for implement Bosch Me7.x family electronic p
 [![GitHub commits](https://img.shields.io/github/commits-since/noisymime/speeduino/202108.svg)](https://github.com/noisymime/speeduino/compare/202108...master)
 ![MISRA](https://img.shields.io/azure-devops/tests/speeduino/Speeduino/1?label=MISRA&passed_label=warnings&failed_label=violations)
 [![Chat on Slack](https://img.shields.io/badge/slack-speeduino-CC2B5E.svg?style=flat&logo=slack)](https://speeduino.com/home/community/slack)
+
+#####Fork of official Speeduino project for implement Bosch Me7.x family electronic pedal.
 
 ##### A low cost, DIY friendly Engine Management System (ECU) based on the Arduino framework
 </div>
