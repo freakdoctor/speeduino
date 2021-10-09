@@ -442,6 +442,27 @@ void readTPS(bool useFilter)
   TPS_time = micros();
 }
 
+void readPedalPosition()
+{
+  pedalPositionlast = currentStatus.pedalPosition;
+  pedalPositionlast_time = pedalPosition_time;
+  
+    analogRead(pinPedalPosition);
+    byte tempPedalPosition = fastMap1023toX(analogRead(pinPedalPosition), 255); //Get the current raw TPS ADC value and map it into a byte
+  //The use of the filter can be overridden if required. This is used on startup to disable priming pulse if flood clear is wanted
+    currentStatus.ppsADC = tempPedalPosition;
+    byte tempADCPps = currentStatus.ppsADC; //The tempADC value is used in order to allow TunerStudio to recover and redo the TPS calibration if this somehow gets corrupted
+
+  if(configPage13.pedalPositionEnable > 0)
+  {
+    //Check that the ADC values fall within the min and max ranges (Should always be the case, but noise can cause these to fluctuate outside the defined range).
+    if (currentStatus.ppsADC < configPage13.pedalPositionMin) { tempADCPps = configPage13.pedalPositionMin; }
+    else if(currentStatus.ppsADC > configPage13.pedalPositionMax) { tempADCPps = configPage13.pedalPositionMax; }
+    currentStatus.pedalPosition = map(tempADCPps, configPage13.pedalPositionMin, configPage13.pedalPositionMax, 0, 100); //Take the raw TPS ADC value and convert it into a TPS% based on the calibrated values
+  }
+  pedalPosition_time = micros();
+}
+
 void readCLT(bool useFilter)
 {
   unsigned int tempReading;
@@ -686,28 +707,7 @@ byte getOilPressure()
   return (byte)tempOilPressure;
 }
 
-byte getPedalPosition()
-{
-  uint16_t tempPedalPosition = 0;
-  uint16_t pedalReading;
 
-  if(configPage13.pedalPositionEnable > 0)
-  {
-    //Perform ADC read
-    pedalReading = analogRead(pinPedalPosition);
-    pedalReading = analogRead(pinPedalPosition);
-
-
-    tempPedalPosition = fastMap10Bit(pedalReading, configPage13.pedalPositionMin, configPage13.pedalPositionMax);
-    tempPedalPosition = ADC_FILTER(tempPedalPosition, 150, currentStatus.pedalPosition); //Apply speed smoothing factor
-    //Sanity check
-    if(tempPedalPosition > configPage13.pedalPositionMax) { tempPedalPosition = configPage13.pedalPositionMax; }
-    if(tempPedalPosition < 0 ) { tempPedalPosition = 0; } //prevent negative values, which will cause problems later when the values aren't signed.
-  }
-
-
-  return (byte)tempPedalPosition;
-}
 
 /*
  * The interrupt function for reading the flex sensor frequency and pulse width

@@ -729,6 +729,7 @@ struct statuses {
   byte outputsStatus;
   byte TS_SD_Status; //TunerStudios SD card status
   byte pedalPosition;
+  byte ppsADC;
 };
 
 /** Page 2 of the config - mostly variables that are required for fuel.

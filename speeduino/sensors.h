@@ -53,6 +53,9 @@ bool auxIsEnabled;
 byte TPSlast; /**< The previous TPS reading */
 unsigned long TPS_time; //The time the TPS sample was taken
 unsigned long TPSlast_time; //The time the previous TPS sample was taken
+byte pedalPositionlast;
+unsigned long pedalPosition_time; //The time the TPS sample was taken
+unsigned long pedalPositionlast_time; //The time the previous TPS sample was taken
 byte MAPlast; /**< The previous MAP reading */
 unsigned long MAP_time; //The time the MAP sample was taken
 unsigned long MAPlast_time; //The time the previous MAP sample was taken
@@ -85,7 +88,7 @@ uint16_t getSpeed();
 byte getGear();
 byte getFuelPressure();
 byte getOilPressure();
-byte getPedalPosition();
+void readPedalPosition();
 uint16_t readAuxanalog(uint8_t analogPin);
 uint16_t readAuxdigital(uint8_t digitalPin);
 void readCLT(bool=true); //Allows the option to override the use of the filter
