@@ -2543,7 +2543,7 @@ void setPinMapping(byte boardID)
   if ( (configPage10.vvt2Pin != 0) && (configPage10.vvt2Pin < BOARD_MAX_IO_PINS) ) { pinVVT_2 = pinTranslate(configPage10.vvt2Pin); }
 
   if ( (configPage13.pedalPositionEnable) && (configPage13.pedalPositionPin < BOARD_MAX_IO_PINS) ) { pinPedalPosition = pinTranslateAnalog(configPage13.pedalPositionPin); }
-  if ( (configPage13.pedalPositionEnable) && (configPage13.tbMotPwmPin < BOARD_MAX_IO_PINS) ) { pinTbMotPwm = pinTranslateAnalog(configPage13.tbMotPwmPin); }
+  if ( (configPage13.pedalPositionEnable) && (configPage13.tbMotPwmPin < BOARD_MAX_IO_PINS) ) { pinTbMotPwm = pinTranslate(configPage13.tbMotPwmPin); }
 
   //Currently there's no default pin for Idle Up
   pinIdleUp = pinTranslate(configPage2.idleUpPin);
