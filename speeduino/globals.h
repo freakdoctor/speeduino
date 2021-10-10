@@ -1424,9 +1424,9 @@ struct config13 {
   byte unused12_124 : 1; //byte 124
   byte pedalPositionMin; //byte 125
   byte pedalPositionMax; //byte 126
-  byte tbMotPwmPin : 5; //byte 127
+  byte tbMotPwmPin : 6; //byte 127
 
-  byte unused12_127 : 3;
+  byte unused12_127 : 2;
 
 #if defined(CORE_AVR)
   };
