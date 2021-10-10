@@ -1420,11 +1420,13 @@ struct config13 {
 //Electronic pedal
   byte pedalPositionEnable : 1; //byte 124
   byte pedalPositionPin : 5; //byte 124
-  byte unused12_124 : 2; //byte 124
+  byte tbAutoCalEnable : 1; //byte 124
+  byte unused12_124 : 1; //byte 124
   byte pedalPositionMin; //byte 125
   byte pedalPositionMax; //byte 126
+  byte tbMotPwmPin : 5; //byte 127
 
-  byte unused12_127_127[1];
+  byte unused12_127 : 3;
 
 #if defined(CORE_AVR)
   };

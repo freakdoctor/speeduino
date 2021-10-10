@@ -248,6 +248,7 @@ byte pinMC33810_2_CS;
   byte pinSPIFlash_CS;
 #endif
 byte pinPedalPosition;
+byte pinTbMotPwm;
 
 struct statuses currentStatus; /**< The master global "live" status struct. Contains all values that are updated frequently and used across modules */
 struct config2 configPage2;

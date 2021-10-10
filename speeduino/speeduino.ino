@@ -41,6 +41,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "engineProtection.h"
 #include "secondaryTables.h"
 #include BOARD_H //Note that this is not a real file, it is defined in globals.h. 
+//#include "pedal.h"
 
 int ignition1StartAngle = 0;
 int ignition2StartAngle = 0;
@@ -307,6 +308,8 @@ void loop()
       currentStatus.fuelPressure = getFuelPressure();
       currentStatus.oilPressure = getOilPressure();
 
+      tbCalibration();
+
       if(auxIsEnabled == true)
       {
         //TODO dazq to clean this right up :)
@@ -368,7 +371,7 @@ void loop()
     {
       BIT_CLEAR(TIMER_mask, BIT_TIMER_1HZ);
       readBaro(); //Infrequent baro readings are not an issue.
-
+      
       if ( (configPage10.wmiEnabled > 0) && (configPage10.wmiIndicatorEnabled > 0) )
       {
         // water tank empty

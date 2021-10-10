@@ -3,66 +3,48 @@
     ^ ^
   =( '' )=
   (")_(")
+  &
+  FDR Motorsport
 
   Speeduino Bosch electronic throttle body
 
-
-  Hardware Connections:
-  -Throttle Input 0:        Pin A0
-  -TPS 0:                   Pin A1
-
-  -VNH7070AS H-Bridge Enable A: Pin 9
-  -VNH7070AS H-Bridge Input 1:  Pin 8
-  -VNH7070AS H-Bridge Input 2:  Pin 11
 */
 
 #include "pedal.h"
-
-//Pins assignments
-/*
-#define pinI1 4
-#define pinI2 5
-#define speedPin 9
-*/
-
-
-
-/*
-
-
+#include "sensors.h"
+#include "globals.h"
+#include "init.h"
+#include "comms.h"
 
 void tbCalibration()
 {
-  //Set PWM frequency to 31.37255 kHz
- // TCCR1B = TCCR1B & 0b11111000 | 0x01;
-
-  Input = 0;
-  Setpoint = 0;
-  
-  pinMode(pinI1, OUTPUT); //VNH7070AS H-Bridge Input 1
-  pinMode(pinI2, OUTPUT); //VNH7070AS H-Bridge Input 2
-  pinMode(speedPin, OUTPUT); //VNH7070AS H-Bridge Enable
-  digitalWrite(pinI2, LOW); //VNH7070AS H-Bridge Input 2
-  digitalWrite(pinI1, HIGH); //VNH7070AS H-Bridge Input 1
-
-  //Auto Calibration TPS
-  while (millis() < 1000) {
-    sensorValue = analogRead(1);
-    // record the minimum sensor value
-    minTps = sensorValue;
-  }
-  while (millis() < 2500) {
-    sensorValue = analogRead(1);
-    analogWrite(speedPin, 255);
-    // record the maximum sensor value
-    maxTps = sensorValue;
-  }
-  if (millis() >  2500) {
-    analogWrite(speedPin, 0);
+  if ( configPage13.tbAutoCalEnable > 0)
+  {
+    currentTime = millis();
+    if((currentTime-previousTime)<2500)
+    {
+      //Auto Calibration TPS
+      while (previousTime < 1000) {
+        tbSensorVal = analogRead(pinTPS);
+        // record the minimum sensor value
+        configPage2.tpsMin = tbSensorVal;
+      }
+      while (previousTime < 2500) {
+        tbSensorVal = analogRead(pinTPS);
+        analogWrite(pinTbMotPwm, 255);
+        // record the maximum sensor value
+        configPage2.tpsMax = tbSensorVal;
+      }
+      if (previousTime >  2500) {
+        analogWrite(pinTbMotPwm, 0);
+        configPage13.tbAutoCalEnable = 0;
+        previousTime=currentTime;
+      }
+    }
   }
 }
 
-
+/*
 void tbCompute()
 {
   //PID Loop tunings
@@ -82,12 +64,12 @@ void tbCompute()
   //Set throttle to 0
   if (Setpoint <= 5)
   {
-    analogWrite(speedPin, 0);
+    analogWrite(tbMotPwmPin, 0);
   }
   else
   {
     myPID.Compute();
-    analogWrite(speedPin, Output);
+    analogWrite(tbMotPwmPin, Output);
   }
 
 }
