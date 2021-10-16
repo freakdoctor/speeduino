@@ -68,5 +68,12 @@
 #define TS_CMD_VSS_RATIO5 39173
 #define TS_CMD_VSS_RATIO6 39174
 
+#define TS_CMD_TB_CAL     50000
+#define TS_CMD_PPS_MIN    50001
+#define TS_CMD_PPS_MAX    50002
+
 /* the maximum id number is 65,535 */
+
+//= decimal to hexadecimal. ex: 39168 = 9900 in hexadecimal so you write the command = E\x99\x00 in TunerStudio
+
 void TS_CommandButtonsHandler(uint16_t);

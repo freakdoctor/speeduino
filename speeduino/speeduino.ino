@@ -308,8 +308,6 @@ void loop()
       currentStatus.fuelPressure = getFuelPressure();
       currentStatus.oilPressure = getOilPressure();
 
-      tbCalibration();
-
       if(auxIsEnabled == true)
       {
         //TODO dazq to clean this right up :)

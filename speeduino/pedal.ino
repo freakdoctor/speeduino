@@ -10,7 +10,6 @@
 
 */
 
-#include "pedal.h"
 #include "sensors.h"
 #include "globals.h"
 #include "init.h"
@@ -18,8 +17,6 @@
 
 void tbCalibration()
 {
-  if ( configPage13.tbAutoCalEnable > 0)
-  {
     currentTime = millis();
     if((currentTime-previousTime)<2500)
     {
@@ -37,11 +34,19 @@ void tbCalibration()
       }
       if (previousTime >  2500) {
         analogWrite(pinTbMotPwm, 0);
-        configPage13.tbAutoCalEnable = 0;
         previousTime=currentTime;
       }
     }
-  }
+}
+
+void ppsMinCal()
+{
+  configPage13.pedalPositionMin = currentStatus.ppsADC;
+}
+
+void ppsMaxCal()
+{
+  configPage13.pedalPositionMax = currentStatus.ppsADC;
 }
 
 /*

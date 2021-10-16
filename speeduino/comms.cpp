@@ -140,6 +140,13 @@ void command()
           TS_CommandButtonsHandler(cmdCombined);
           cmdPending = false;
         }
+        else if( (cmdCombined >= TS_CMD_PPS_MIN) && (cmdCombined <= TS_CMD_PPS_MAX) )
+        {
+          //PPS Calibration
+          TS_CommandButtonsHandler(cmdCombined);
+          cmdPending = false;
+        }
+        
       }
       break;
 

@@ -10,6 +10,8 @@
 #include "scheduledIO.h"
 #include "sensors.h"
 #include "storage.h"
+#include "pedal.h"
+
 #ifdef USE_MC33810
   #include "acc_mc33810.h"
 #endif
@@ -344,6 +346,17 @@ void TS_CommandButtonsHandler(uint16_t buttonCommand)
         writeConfig(1); // Need to manually save the new config value as it will not trigger a burn in tunerStudio due to use of ControllerPriority
         BIT_SET(currentStatus.status3, BIT_STATUS3_VSS_REFRESH); //Set the flag to trigger the UI reset
       }
+      break;
+      
+    //case TS_CMD_TB_CAL:
+    //Si RPM = 0 Lancer la calibration
+
+    case TS_CMD_PPS_MIN:
+        ppsMinCal();
+      break;
+
+    case TS_CMD_PPS_MAX:
+        ppsMaxCal();
       break;
 
     //STM32 Commands
