@@ -348,8 +348,9 @@ void TS_CommandButtonsHandler(uint16_t buttonCommand)
       }
       break;
       
-    //case TS_CMD_TB_CAL:
-    //Si RPM = 0 Lancer la calibration
+    case TS_CMD_TB_CAL:
+      tbCalibration();
+    break;
 
     case TS_CMD_PPS_MIN:
         ppsMinCal();

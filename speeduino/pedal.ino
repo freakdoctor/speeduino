@@ -14,10 +14,19 @@
 #include "globals.h"
 #include "init.h"
 #include "comms.h"
+#include "src/PID_v1/PID_v1.h"
+
+
+//Define Variables we'll be connecting to
+long Setpoint, Input, Output;
+
+//Specify the links and initial tuning parameters
+PID tbPID(&Input, &Output, &Setpoint, 1, 0, 0, DIRECT);
 
 void tbCalibration()
 {
     currentTime = millis();
+    previousTime=currentTime;
     if((currentTime-previousTime)<2500)
     {
       //Auto Calibration TPS
@@ -28,13 +37,12 @@ void tbCalibration()
       }
       while (previousTime < 2500) {
         tbSensorVal = analogRead(pinTPS);
-        analogWrite(pinTbMotPwm, 255);
+        analogWrite(pinThrottlePwm, 255);
         // record the maximum sensor value
         configPage2.tpsMax = tbSensorVal;
       }
       if (previousTime >  2500) {
-        analogWrite(pinTbMotPwm, 0);
-        previousTime=currentTime;
+        analogWrite(pinThrottlePwm, 0);
       }
     }
 }
@@ -52,16 +60,16 @@ void ppsMaxCal()
 /*
 void tbCompute()
 {
-  //PID Loop tunings
-  myPID.SetTunings(0.15, 2.00, 0.00);
-  //myPID.SetTunings(0.80, 0.20, 0.01);
+  tbPID.SetMode(AUTOMATIC); // PID Mode
+  //PID Loop tunintbPID.SetTunings(0.15, 2.00, 0.00);
+  tbPID.SetTunings(0.80, 0.20, 0.01);
 
-   int TPS1 = constrain(analogRead(1), minTps, maxTps);  //Range: autocalibrated min and max values
+  //byte tpsPosition = currentStatus.tpsADC;  //Range: autocalibrated min and max values
 
   //PID Input from TPS
-   Input = map(constrain(TPS1, minTps, maxTps), minTps, maxTps, 0, 180);
+   Input = map(currentStatus.tpsADC, configPage2.tpsMin, configPage2.tpsMax, 0, 255);
 
-  int Pedal0 = map(constrain(analogRead(0), 70, 470), 70, 470, 0, 180);  //Range: 70 - 470
+  byte Pedal0 = map(currentStatus.ppsADC, configPage13.pedalPositionMin, configPage13.pedalPositionMax, 0, 255);
 
 
   //PID Setpoint from Throttle Pedal
@@ -69,12 +77,12 @@ void tbCompute()
   //Set throttle to 0
   if (Setpoint <= 5)
   {
-    analogWrite(tbMotPwmPin, 0);
+    analogWrite(pinThrottlePwm, 0);
   }
   else
   {
-    myPID.Compute();
-    analogWrite(tbMotPwmPin, Output);
+  tbPID.Compute();
+    analogWrite(pinThrottlePwm, Output);
   }
 
 }
