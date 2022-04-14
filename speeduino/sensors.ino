@@ -451,14 +451,14 @@ void readPedalPosition()
     byte tempPedalPosition = fastMap1023toX(analogRead(pinPedalPosition), 255); //Get the current raw TPS ADC value and map it into a byte
   //The use of the filter can be overridden if required. This is used on startup to disable priming pulse if flood clear is wanted
     currentStatus.ppsADC = tempPedalPosition;
-    byte tempADCPps = currentStatus.ppsADC; //The tempADC value is used in order to allow TunerStudio to recover and redo the TPS calibration if this somehow gets corrupted
+    byte tempADCPps = currentStatus.ppsADC; //The tempADC value is used in order to allow TunerStudio to recover and redo the PPS calibration if this somehow gets corrupted
 
   if(configPage13.pedalPositionEnable > 0)
   {
     //Check that the ADC values fall within the min and max ranges (Should always be the case, but noise can cause these to fluctuate outside the defined range).
     if (currentStatus.ppsADC < configPage13.pedalPositionMin) { tempADCPps = configPage13.pedalPositionMin; }
     else if(currentStatus.ppsADC > configPage13.pedalPositionMax) { tempADCPps = configPage13.pedalPositionMax; }
-    currentStatus.pedalPosition = map(tempADCPps, configPage13.pedalPositionMin, configPage13.pedalPositionMax, 0, 100); //Take the raw TPS ADC value and convert it into a TPS% based on the calibrated values
+    currentStatus.pedalPosition = map(tempADCPps, configPage13.pedalPositionMin, configPage13.pedalPositionMax, 0, 100); //Take the raw PPS ADC value and convert it into a PPS% based on the calibrated values
   }
   pedalPosition_time = micros();
 }

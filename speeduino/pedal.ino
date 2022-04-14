@@ -15,36 +15,36 @@
 #include "init.h"
 #include "comms.h"
 #include "src/PID_v1/PID_v1.h"
+#include "auxiliaries.h"
+#include "pedal.h"
 
+long tbSetpoint, tbInput, tbOutput;
+PID tbPID(&tbInput, &tbOutput, &tbSetpoint, 1, 0, 0, DIRECT);
 
-//Define Variables we'll be connecting to
-long Setpoint, Input, Output;
-
-//Specify the links and initial tuning parameters
-PID tbPID(&Input, &Output, &Setpoint, 1, 0, 0, DIRECT);
+byte tbSensorVal;
+unsigned long tbCurrentTime = 0;
+unsigned long tbPreviousTime = 0;
 
 void tbCalibration()
 {
-    currentTime = millis();
-    previousTime=currentTime;
-    if((currentTime-previousTime)<2500)
-    {
+    tbCurrentTime = millis();
+    tbPreviousTime = tbCurrentTime;
+
       //Auto Calibration TPS
-      while (previousTime < 1000) {
+      while (tbCurrentTime - tbPreviousTime < 1000) {
         tbSensorVal = analogRead(pinTPS);
         // record the minimum sensor value
         configPage2.tpsMin = tbSensorVal;
       }
-      while (previousTime < 2500) {
+      while (tbCurrentTime - tbPreviousTime < 2500) {
         tbSensorVal = analogRead(pinTPS);
-        analogWrite(pinThrottlePwm, 255);
+        analogWrite(pinTpsPwm, 255);
         // record the maximum sensor value
         configPage2.tpsMax = tbSensorVal;
       }
-      if (previousTime >  2500) {
-        analogWrite(pinThrottlePwm, 0);
+      if (tbCurrentTime - tbPreviousTime >  2500) {
+        analogWrite(pinTpsPwm, 0);
       }
-    }
 }
 
 void ppsMinCal()
@@ -57,33 +57,39 @@ void ppsMaxCal()
   configPage13.pedalPositionMax = currentStatus.ppsADC;
 }
 
-/*
+
 void tbCompute()
 {
-  tbPID.SetMode(AUTOMATIC); // PID Mode
-  //PID Loop tunintbPID.SetTunings(0.15, 2.00, 0.00);
-  tbPID.SetTunings(0.80, 0.20, 0.01);
-
-  //byte tpsPosition = currentStatus.tpsADC;  //Range: autocalibrated min and max values
-
-  //PID Input from TPS
-   Input = map(currentStatus.tpsADC, configPage2.tpsMin, configPage2.tpsMax, 0, 255);
-
-  byte Pedal0 = map(currentStatus.ppsADC, configPage13.pedalPositionMin, configPage13.pedalPositionMax, 0, 255);
-
-
-  //PID Setpoint from Throttle Pedal
-  Setpoint = Pedal0;
-  //Set throttle to 0
-  if (Setpoint <= 5)
+  
+  if (configPage13.pedalPositionEnable > 0)
   {
-    analogWrite(pinThrottlePwm, 0);
-  }
-  else
-  {
-  tbPID.Compute();
-    analogWrite(pinThrottlePwm, Output);
-  }
+    tbPID.SetTunings(0.80, 0.20, 0.01);
+    tbPID.SetMode(AUTOMATIC);
 
+    analogRead(pinTPS);
+    long tpsPosition = analogRead(pinTPS);  //Range: autocalibrated min and max values
+
+    //PID Input from TPS
+    tbInput = map(tpsPosition, configPage2.tpsMin, configPage2.tpsMax, 0, 100);
+    //Input = currentStatus.pedalPosition;
+
+    analogRead(pinPedalPosition);
+    int Pedal0 = map(analogRead(pinPedalPosition), configPage13.pedalPositionMin, configPage13.pedalPositionMax, 0, 100);
+    //byte Pedal0 = Input;
+
+
+    //PID Setpoint from Throttle Pedal
+    tbSetpoint = Pedal0;
+    //Set throttle to 0
+    if (tbSetpoint <= 5)
+    {
+      analogWrite(pinTpsPwm, 0);
+    }
+    else
+    {
+    tbPID.Compute();
+      analogWrite(pinTpsPwm, tbOutput);
+    }
+
+  }
 }
-*/

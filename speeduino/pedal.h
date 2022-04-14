@@ -10,7 +10,7 @@
 
 */
 
-#include "Arduino.h"
+//#include "Arduino.h"
 //#include "PID_v1.h"
 
 
@@ -34,12 +34,8 @@
 
 //Input = 0;
 //Setpoint = 0;
-
-byte tbSensorVal;
-unsigned long currentTime=0;
-unsigned long previousTime=0;
-
+//Define Variables we'll be connecting to
 void tbCalibration();
 void ppsMinCal();
 void ppsMaxCal();
-//void tbCompute();
+void tbCompute();

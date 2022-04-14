@@ -41,7 +41,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "engineProtection.h"
 #include "secondaryTables.h"
 #include BOARD_H //Note that this is not a real file, it is defined in globals.h. 
-//#include "pedal.h"
+#include "pedal.h"
 
 int ignition1StartAngle = 0;
 int ignition2StartAngle = 0;
@@ -108,6 +108,8 @@ void loop()
 {
       mainLoopCount++;
       LOOP_TIMER = TIMER_mask;
+
+      tbCompute();
 
       //SERIAL Comms
       //Initially check that the last serial send values request is not still outstanding

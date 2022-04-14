@@ -1512,6 +1512,8 @@ extern byte pinMC33810_2_CS;
 #ifdef USE_SPI_EEPROM
   extern byte pinSPIFlash_CS;
 #endif
+extern byte pinPedalPosition;
+extern byte pinTpsPwm;
 
 
 /* global variables */ // from speeduino.ino
